@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCS NQT — 4 Day DP Blitz Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08090d;
+  --surface: #0f1117;
+  --card: #13161f;
+  --border: #1e2235;
+  --text: #dde3f0;
+  --muted: #4a5270;
+  --d1: #3b82f6;
+  --d2: #8b5cf6;
+  --d3: #f59e0b;
+  --d4: #ef4444;
+  --green: #22c55e;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Outfit', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+/* HEADER */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 22px 24px 18px;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-inner { max-width: 1060px; margin: 0 auto; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.logo { flex: 1; }
+.logo-sub { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+.logo-title { font-size: 1.35rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+.tcs-pill { background: #ef4444; color: #fff; font-size: 10px; font-family: var(--mono); font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 1px; }
+
+/* Countdown */
+.countdown { display: flex; gap: 8px; align-items: center; }
+.cd-block { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 7px 12px; text-align: center; min-width: 50px; }
+.cd-num { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; color: #ef4444; line-height: 1; }
+.cd-label { font-size: 8px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+.cd-sep { color: var(--muted); font-weight: 700; font-size: 1.1rem; }
+
+/* Overall bar */
+.overall-wrap { max-width: 1060px; margin: 14px auto 0; }
+.bar-meta { display: flex; justify-content: space-between; font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 6px; }
+.bar-meta span:last-child { color: var(--green); }
+.bar-track { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--d1), var(--d2), var(--d3), var(--d4)); transition: width 0.5s ease; }
+
+/* MAIN */
+main { max-width: 1060px; margin: 0 auto; padding: 32px 20px 80px; }
+
+/* Day section */
+.day-section { margin-bottom: 36px; border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+.day-header { padding: 18px 22px; display: flex; align-items: center; gap: 14px; cursor: pointer; user-select: none; }
+.d1 .day-header { background: rgba(59,130,246,0.07); border-bottom: 1px solid rgba(59,130,246,0.18); }
+.d2 .day-header { background: rgba(139,92,246,0.07); border-bottom: 1px solid rgba(139,92,246,0.18); }
+.d3 .day-header { background: rgba(245,158,11,0.07); border-bottom: 1px solid rgba(245,158,11,0.18); }
+.d4 .day-header { background: rgba(239,68,68,0.09); border-bottom: 1px solid rgba(239,68,68,0.28); animation: pulseborder 2.5s infinite; }
+@keyframes pulseborder { 0%,100% { box-shadow: none; } 50% { box-shadow: inset 0 0 0 1px rgba(239,68,68,0.12); } }
+
+.day-num { width: 50px; height: 50px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; flex-shrink: 0; }
+.d1 .day-num { background: rgba(59,130,246,0.14); color: var(--d1); border: 1px solid rgba(59,130,246,0.28); }
+.d2 .day-num { background: rgba(139,92,246,0.14); color: var(--d2); border: 1px solid rgba(139,92,246,0.28); }
+.d3 .day-num { background: rgba(245,158,11,0.14); color: var(--d3); border: 1px solid rgba(245,158,11,0.28); }
+.d4 .day-num { background: rgba(239,68,68,0.14); color: var(--d4); border: 1px solid rgba(239,68,68,0.28); }
+.day-num-big { font-size: 1.1rem; line-height: 1; }
+.day-num-word { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+.day-info { flex: 1; }
+.day-date { font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 3px; }
+.day-title { font-size: 1.1rem; font-weight: 700; }
+.day-focus { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
+
+.day-prog { text-align: right; flex-shrink: 0; }
+.prog-frac { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; }
+.d1 .prog-frac { color: var(--d1); } .d2 .prog-frac { color: var(--d2); }
+.d3 .prog-frac { color: var(--d3); } .d4 .prog-frac { color: var(--d4); }
+.prog-label { font-size: 9px; color: var(--muted); }
+.day-mini-bar { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; margin-top: 5px; width: 80px; margin-left: auto; }
+.d1 .day-mini-fill { background: var(--d1); } .d2 .day-mini-fill { background: var(--d2); }
+.d3 .day-mini-fill { background: var(--d3); } .d4 .day-mini-fill { background: var(--d4); }
+.day-mini-fill { height: 100%; border-radius: 99px; transition: width 0.4s; }
+
+.toggle-btn { font-size: 1rem; color: var(--muted); transition: transform 0.3s; flex-shrink: 0; }
+.day-section.collapsed .toggle-btn { transform: rotate(-90deg); }
+.day-section.collapsed .day-body { display: none; }
+
+/* Day body */
+.day-body { background: var(--card); padding: 18px 22px; }
+.q-section { margin-bottom: 20px; }
+.q-section:last-child { margin-bottom: 0; }
+.q-sec-label { font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed var(--border); }
+
+/* Question row */
+.q-row { display: flex; align-items: center; gap: 11px; padding: 9px 6px; border-bottom: 1px solid var(--border); cursor: pointer; border-radius: 8px; transition: background 0.15s; }
+.q-row:last-child { border-bottom: none; }
+.q-row:hover { background: rgba(255,255,255,0.025); }
+.q-row.done .q-text { text-decoration: line-through; color: var(--muted); }
+.q-row.done .q-link { opacity: 0.35; pointer-events: none; }
+
+/* Checkbox */
+.cb { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+.cb-check { display: none; font-size: 11px; color: var(--green); }
+.q-row.done .cb { border-color: var(--green); background: rgba(34,197,94,0.13); }
+.q-row.done .cb-check { display: block; }
+.d1 .q-row:not(.done):hover .cb { border-color: var(--d1); }
+.d2 .q-row:not(.done):hover .cb { border-color: var(--d2); }
+.d3 .q-row:not(.done):hover .cb { border-color: var(--d3); }
+.d4 .q-row:not(.done):hover .cb { border-color: var(--d4); }
+
+.q-text { flex: 1; font-size: 0.865rem; line-height: 1.4; }
+
+/* Badges */
+.badge-row { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+.diff-b { font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px; text-transform: uppercase; }
+.easy { background: rgba(34,197,94,0.12); color: #22c55e; }
+.med { background: rgba(245,158,11,0.12); color: #f59e0b; }
+.hard { background: rgba(239,68,68,0.12); color: #ef4444; }
+.tcs-b { background: rgba(239,68,68,0.12); color: #ff6b6b; font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+.theory-b { background: rgba(139,92,246,0.12); color: #8b5cf6; font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+
+.q-link { font-size: 11px; color: var(--muted); text-decoration: none; background: var(--border); padding: 4px 10px; border-radius: 6px; font-family: var(--mono); transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
+.q-link:hover { color: var(--text); background: #252a3d; }
+
+/* Tip */
+.tip { background: rgba(255,255,255,0.02); border-left: 3px solid var(--muted); border-radius: 0 8px 8px 0; padding: 11px 15px; font-size: 0.78rem; color: var(--muted); line-height: 1.75; margin-top: 14px; }
+.d1 .tip { border-left-color: var(--d1); } .d1 .tip strong { color: var(--d1); }
+.d2 .tip { border-left-color: var(--d2); } .d2 .tip strong { color: var(--d2); }
+.d3 .tip { border-left-color: var(--d3); } .d3 .tip strong { color: var(--d3); }
+.d4 .tip { border-left-color: var(--d4); } .d4 .tip strong { color: var(--d4); }
+.tip strong { font-weight: 700; }
+
+/* Reset */
+.reset-btn { display: block; margin: 28px auto 0; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 11px; padding: 8px 20px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.reset-btn:hover { border-color: var(--d4); color: var(--d4); }
+
+/* Congrats */
+.congrats { display: none; position: fixed; inset: 0; background: rgba(8,9,13,0.96); z-index: 9998; align-items: center; justify-content: center; flex-direction: column; gap: 18px; text-align: center; padding: 20px; }
+.congrats.show { display: flex; }
+.congrats-emoji { font-size: 4.5rem; }
+.congrats h2 { font-size: 2.2rem; font-weight: 900; color: var(--green); }
+.congrats p { color: var(--muted); font-size: 0.95rem; max-width: 400px; line-height: 1.7; }
+.close-btn { background: var(--green); color: #000; font-family: var(--mono); font-weight: 700; font-size: 13px; border: none; padding: 12px 28px; border-radius: 10px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-sub">Dynamic Programming — Exam Sprint</div>
+      <div class="logo-title">4-Day Blitz Plan <span class="tcs-pill">TCS NQT</span></div>
+    </div>
+    <div class="countdown">
+      <div class="cd-block"><div class="cd-num" id="cd-d">--</div><div class="cd-label">Days</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-block"><div class="cd-num" id="cd-h">--</div><div class="cd-label">Hrs</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-block"><div class="cd-num" id="cd-m">--</div><div class="cd-label">Min</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-block"><div class="cd-num" id="cd-s">--</div><div class="cd-label">Sec</div></div>
+    </div>
+  </div>
+  <div class="overall-wrap">
+    <div class="bar-meta">
+      <span id="bar-left-label">Overall Progress</span>
+      <span id="bar-right-label">0 / 41 done</span>
+    </div>
+    <div class="bar-track"><div class="bar-fill" id="overall-fill" style="width:0%"></div></div>
+  </div>
+</header>
+
+<main>
+
+<!-- ══════════ DAY 1 ══════════ -->
+<div class="day-section d1" id="day-1">
+  <div class="day-header" onclick="toggleDay('day-1')">
+    <div class="day-num"><div class="day-num-big">01</div><div class="day-num-word">Day</div></div>
+    <div class="day-info">
+      <div class="day-date">Saturday · 29 March 2026</div>
+      <div class="day-title">1D DP + Knapsack Patterns</div>
+      <div class="day-focus">Memoization · Tabulation · Coin Change · Subset Sum</div>
+    </div>
+    <div class="day-prog">
+      <div class="prog-frac" id="prog-day-1">0/11</div>
+      <div class="prog-label">completed</div>
+      <div class="day-mini-bar"><div class="day-mini-fill" id="bar-day-1" style="width:0%"></div></div>
+    </div>
+    <div class="toggle-btn">▾</div>
+  </div>
+  <div class="day-body">
+    <div class="q-section">
+      <div class="q-sec-label">🧱 1D DP — Core Problems (Morning · 3 hrs)</div>
+      <div class="q-row" data-id="d1q1" data-day="day-1" onclick="toggle('d1q1','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Climbing Stairs</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b easy">Easy</span></div><a class="q-link" href="https://leetcode.com/problems/climbing-stairs/" target="_blank" onclick="stopProp(event)">LC #70 ↗</a></div>
+      <div class="q-row" data-id="d1q2" data-day="day-1" onclick="toggle('d1q2','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Min Cost Climbing Stairs</div><div class="badge-row"><span class="diff-b easy">Easy</span></div><a class="q-link" href="https://leetcode.com/problems/min-cost-climbing-stairs/" target="_blank" onclick="stopProp(event)">LC #746 ↗</a></div>
+      <div class="q-row" data-id="d1q3" data-day="day-1" onclick="toggle('d1q3','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">House Robber</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/house-robber/" target="_blank" onclick="stopProp(event)">LC #198 ↗</a></div>
+      <div class="q-row" data-id="d1q4" data-day="day-1" onclick="toggle('d1q4','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Maximum Subarray — Kadane's Algorithm</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/maximum-subarray/" target="_blank" onclick="stopProp(event)">LC #53 ↗</a></div>
+      <div class="q-row" data-id="d1q5" data-day="day-1" onclick="toggle('d1q5','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Jump Game</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/jump-game/" target="_blank" onclick="stopProp(event)">LC #55 ↗</a></div>
+      <div class="q-row" data-id="d1q6" data-day="day-1" onclick="toggle('d1q6','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Decode Ways</div><div class="badge-row"><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/decode-ways/" target="_blank" onclick="stopProp(event)">LC #91 ↗</a></div>
+    </div>
+    <div class="q-section">
+      <div class="q-sec-label">🎒 Knapsack — TCS Favourite (Afternoon · 3 hrs)</div>
+      <div class="q-row" data-id="d1q7" data-day="day-1" onclick="toggle('d1q7','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Coin Change (Min Coins)</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/coin-change/" target="_blank" onclick="stopProp(event)">LC #322 ↗</a></div>
+      <div class="q-row" data-id="d1q8" data-day="day-1" onclick="toggle('d1q8','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Coin Change II (Count Ways)</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/coin-change-ii/" target="_blank" onclick="stopProp(event)">LC #518 ↗</a></div>
+      <div class="q-row" data-id="d1q9" data-day="day-1" onclick="toggle('d1q9','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Partition Equal Subset Sum</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/partition-equal-subset-sum/" target="_blank" onclick="stopProp(event)">LC #416 ↗</a></div>
+      <div class="q-row" data-id="d1q10" data-day="day-1" onclick="toggle('d1q10','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Target Sum</div><div class="badge-row"><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/target-sum/" target="_blank" onclick="stopProp(event)">LC #494 ↗</a></div>
+      <div class="q-row" data-id="d1q11" data-day="day-1" onclick="toggle('d1q11','day-1')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Perfect Squares</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/perfect-squares/" target="_blank" onclick="stopProp(event)">LC #279 ↗</a></div>
+    </div>
+    <div class="tip"><strong>💡 Strategy:</strong> Write recurrence on paper first. For every problem, solve recursion → memo → tabulation. TCS MCQs ask "find dp[5]" — practice tracing by hand. Focus time: ~6 hrs total today.</div>
+  </div>
+</div>
+
+<!-- ══════════ DAY 2 ══════════ -->
+<div class="day-section d2" id="day-2">
+  <div class="day-header" onclick="toggleDay('day-2')">
+    <div class="day-num"><div class="day-num-big">02</div><div class="day-num-word">Day</div></div>
+    <div class="day-info">
+      <div class="day-date">Sunday · 30 March 2026</div>
+      <div class="day-title">String DP + Grid DP</div>
+      <div class="day-focus">LCS · Edit Distance · LIS · Unique Paths · Maximal Square</div>
+    </div>
+    <div class="day-prog">
+      <div class="prog-frac" id="prog-day-2">0/10</div>
+      <div class="prog-label">completed</div>
+      <div class="day-mini-bar"><div class="day-mini-fill" id="bar-day-2" style="width:0%"></div></div>
+    </div>
+    <div class="toggle-btn">▾</div>
+  </div>
+  <div class="day-body">
+    <div class="q-section">
+      <div class="q-sec-label">📝 String DP — LCS Family (Morning · 3 hrs)</div>
+      <div class="q-row" data-id="d2q1" data-day="day-2" onclick="toggle('d2q1','day-2')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Longest Common Subsequence</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/longest-common-subsequence/" target="_blank" onclick="stopProp(event)">LC #1143 ↗</a></div>
+      <div class="q-row" data-id="d2q2" data-day="day-2" onclick="toggle('d2q2','day-2')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Edit Distance (Insert/Delete/Replace)</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/edit-distance/" target="_blank" onclick="stopProp(event)">LC #72 ↗</a></div>
+      <div class="q-row" data-id="d2q3" data-day="day-2" onclick="toggle('d2q3','day-2')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Longest Increasing Subsequence (LIS)</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/longest-increasing-subsequence/" target="_blank" onclick="stopProp(event)">LC #300 ↗</a></div>
+      <div class="q-row" data-id="d2q4" data-day="day-2" onclick="toggle('d2q4','day-2')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Longest Palindromic Subsequence</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/longest-palindromic-subsequence/" target="_blank" onclick="stopProp(event)">LC #516 ↗</a></div>
+      <div class="q-row" data-id="d2q5" data-day="day-2" onclick="toggle('d2q5','day-2')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Delete Operation for Two Strings</div><div class="badge-row"><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/delete-operation-for-two-strings/" target="_blank" onclick="stopProp(event)">LC #583 ↗</a></div>
+    </div>
+    <div class="q-section">
+      <div class="q-sec-label">🗺️ Grid DP (Afternoon · 3 hrs)</div>
+      <div class="q-row" data-id="d2q6" data-day="day-2" onclick="toggle('d2q6','day-2')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Unique Paths</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/unique-paths/" target="_blank" onclick="stopProp(event)">LC #62 ↗</a></div>
+      <div class="q-row" data-id="d2q7" data-day="day-2" onclick="toggle('d2q7','day-2')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Unique Paths II (with Obstacles)</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/unique-paths-ii/" target="_blank" onclick="stopProp(event)">LC #63 ↗</a></div>
+      <div class="q-row" data-id="d2q8" data-day="day-2" onclick="toggle('d2q8','day-2')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Minimum Path Sum</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/minimum-path-sum/" target="_blank" onclick="stopProp(event)">LC #64 ↗</a></div>
+      <div class="q-row" data-id="d2q9" data-day="day-2" onclick="toggle('d2q9','day-2')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Maximal Square</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/maximal-square/" target="_blank" onclick="stopProp(event)">LC #221 ↗</a></div>
+      <div class="q-row" data-id="d2q10" data-day="day-2" onclick="toggle('d2q10','day-2')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Triangle (Min Path Top to Bottom)</div><div class="badge-row"><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/triangle/" target="_blank" onclick="stopProp(event)">LC #120 ↗</a></div>
+    </div>
+    <div class="tip"><strong>💡 Key Insight:</strong> LCS table is the backbone — TCS MCQs literally ask you to trace it! Know: LCS of "ABCBDAB" &amp; "BDCABA" = 4. Unique Paths shortcut = C(m+n-2, m-1). Draw the DP table first for string problems. Time: ~6 hrs.</div>
+  </div>
+</div>
+
+<!-- ══════════ DAY 3 ══════════ -->
+<div class="day-section d3" id="day-3">
+  <div class="day-header" onclick="toggleDay('day-3')">
+    <div class="day-num"><div class="day-num-big">03</div><div class="day-num-word">Day</div></div>
+    <div class="day-info">
+      <div class="day-date">Monday · 31 March 2026</div>
+      <div class="day-title">Stock DP + MCQ Theory Revision</div>
+      <div class="day-focus">Stock Patterns · House Robber II · Trace Tables · Complexity</div>
+    </div>
+    <div class="day-prog">
+      <div class="prog-frac" id="prog-day-3">0/12</div>
+      <div class="prog-label">completed</div>
+      <div class="day-mini-bar"><div class="day-mini-fill" id="bar-day-3" style="width:0%"></div></div>
+    </div>
+    <div class="toggle-btn">▾</div>
+  </div>
+  <div class="day-body">
+    <div class="q-section">
+      <div class="q-sec-label">📈 Stock DP + Remaining Patterns (Morning · 3 hrs)</div>
+      <div class="q-row" data-id="d3q1" data-day="day-3" onclick="toggle('d3q1','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Best Time to Buy and Sell Stock</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="diff-b easy">Easy</span></div><a class="q-link" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" onclick="stopProp(event)">LC #121 ↗</a></div>
+      <div class="q-row" data-id="d3q2" data-day="day-3" onclick="toggle('d3q2','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Best Time to Buy and Sell Stock II</div><div class="badge-row"><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank" onclick="stopProp(event)">LC #122 ↗</a></div>
+      <div class="q-row" data-id="d3q3" data-day="day-3" onclick="toggle('d3q3','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Best Time to Buy and Sell Stock with Cooldown</div><div class="badge-row"><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/" target="_blank" onclick="stopProp(event)">LC #309 ↗</a></div>
+      <div class="q-row" data-id="d3q4" data-day="day-3" onclick="toggle('d3q4','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">House Robber II (Circular Array)</div><div class="badge-row"><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/house-robber-ii/" target="_blank" onclick="stopProp(event)">LC #213 ↗</a></div>
+      <div class="q-row" data-id="d3q5" data-day="day-3" onclick="toggle('d3q5','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Jump Game II (Minimum Jumps)</div><div class="badge-row"><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/jump-game-ii/" target="_blank" onclick="stopProp(event)">LC #45 ↗</a></div>
+      <div class="q-row" data-id="d3q6" data-day="day-3" onclick="toggle('d3q6','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Combination Sum IV</div><div class="badge-row"><span class="diff-b med">Med</span></div><a class="q-link" href="https://leetcode.com/problems/combination-sum-iv/" target="_blank" onclick="stopProp(event)">LC #377 ↗</a></div>
+    </div>
+    <div class="q-section">
+      <div class="q-sec-label">📋 TCS NQT MCQ Checklist — Trace by hand! (Afternoon · 2 hrs)</div>
+      <div class="q-row" data-id="d3t1" data-day="day-3" onclick="toggle('d3t1','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Trace LCS table: "ABCBDAB" vs "BDCABA" → answer = 4</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="theory-b">MCQ</span></div></div>
+      <div class="q-row" data-id="d3t2" data-day="day-3" onclick="toggle('d3t2','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Fill 0/1 Knapsack table: W=5, wt=[1,2,3], val=[1,6,10] → answer = 16</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="theory-b">MCQ</span></div></div>
+      <div class="q-row" data-id="d3t3" data-day="day-3" onclick="toggle('d3t3','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Trace LIS: [10,9,2,5,3,7,101,18] → answer = 4 (sequence: 2,3,7,101)</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="theory-b">MCQ</span></div></div>
+      <div class="q-row" data-id="d3t4" data-day="day-3" onclick="toggle('d3t4','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Kadane's trace: [-2,1,-3,4,-1,2,1,-5,4] → answer = 6 (subarray [4,-1,2,1])</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="theory-b">MCQ</span></div></div>
+      <div class="q-row" data-id="d3t5" data-day="day-3" onclick="toggle('d3t5','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Know time complexity: Naive Fib O(2ⁿ), Memoized O(n), Knapsack O(n·W)</div><div class="badge-row"><span class="theory-b">MCQ</span></div></div>
+      <div class="q-row" data-id="d3t6" data-day="day-3" onclick="toggle('d3t6','day-3')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Greedy vs DP: Coin Change (Greedy fails for [1,3,4]) — know WHY DP is needed</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="theory-b">MCQ</span></div></div>
+    </div>
+    <div class="tip"><strong>💡 Evening Plan:</strong> Do a 40-minute cold mock — pick 2 unseen medium DP problems, solve under time pressure. This is your simulation of the actual NQT coding round. Then sleep early — you need a clear head tomorrow!</div>
+  </div>
+</div>
+
+<!-- ══════════ DAY 4 ══════════ -->
+<div class="day-section d4" id="day-4">
+  <div class="day-header" onclick="toggleDay('day-4')">
+    <div class="day-num"><div class="day-num-big">04</div><div class="day-num-word">Day</div></div>
+    <div class="day-info">
+      <div class="day-date">Tuesday · 1 April 2026 🔥 EXAM DAY</div>
+      <div class="day-title">Quick Revision — TCS★ Only (2 Hours Max)</div>
+      <div class="day-focus">Read solutions · Trace logic · No new problems · Stay calm</div>
+    </div>
+    <div class="day-prog">
+      <div class="prog-frac" id="prog-day-4">0/8</div>
+      <div class="prog-label">revised</div>
+      <div class="day-mini-bar"><div class="day-mini-fill" id="bar-day-4" style="width:0%"></div></div>
+    </div>
+    <div class="toggle-btn">▾</div>
+  </div>
+  <div class="day-body">
+    <div class="q-section">
+      <div class="q-sec-label">⚡ Revision Checklist — Just read &amp; trace, DO NOT recode (2 hrs max)</div>
+      <div class="q-row" data-id="d4q1" data-day="day-4" onclick="toggle('d4q1','day-4')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Climbing Stairs — dp[n] = dp[n-1] + dp[n-2], base: dp[1]=1, dp[2]=2</div><div class="badge-row"><span class="tcs-b">TCS★</span></div><a class="q-link" href="https://leetcode.com/problems/climbing-stairs/" target="_blank" onclick="stopProp(event)">LC #70 ↗</a></div>
+      <div class="q-row" data-id="d4q2" data-day="day-4" onclick="toggle('d4q2','day-4')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Coin Change — dp[i] = min(dp[i], dp[i-coin]+1) for each coin</div><div class="badge-row"><span class="tcs-b">TCS★</span></div><a class="q-link" href="https://leetcode.com/problems/coin-change/" target="_blank" onclick="stopProp(event)">LC #322 ↗</a></div>
+      <div class="q-row" data-id="d4q3" data-day="day-4" onclick="toggle('d4q3','day-4')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Max Subarray — cur = max(a[i], cur+a[i]), ans = max(ans, cur)</div><div class="badge-row"><span class="tcs-b">TCS★</span></div><a class="q-link" href="https://leetcode.com/problems/maximum-subarray/" target="_blank" onclick="stopProp(event)">LC #53 ↗</a></div>
+      <div class="q-row" data-id="d4q4" data-day="day-4" onclick="toggle('d4q4','day-4')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Unique Paths — dp[i][j] = dp[i-1][j] + dp[i][j-1], base row/col = 1</div><div class="badge-row"><span class="tcs-b">TCS★</span></div><a class="q-link" href="https://leetcode.com/problems/unique-paths/" target="_blank" onclick="stopProp(event)">LC #62 ↗</a></div>
+      <div class="q-row" data-id="d4q5" data-day="day-4" onclick="toggle('d4q5','day-4')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">LCS — if s1[i]==s2[j]: 1+dp[i-1][j-1] else max(dp[i-1][j], dp[i][j-1])</div><div class="badge-row"><span class="tcs-b">TCS★</span></div><a class="q-link" href="https://leetcode.com/problems/longest-common-subsequence/" target="_blank" onclick="stopProp(event)">LC #1143 ↗</a></div>
+      <div class="q-row" data-id="d4q6" data-day="day-4" onclick="toggle('d4q6','day-4')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">LIS — for j&lt;i where a[j]&lt;a[i]: dp[i] = max(dp[i], dp[j]+1)</div><div class="badge-row"><span class="tcs-b">TCS★</span></div><a class="q-link" href="https://leetcode.com/problems/longest-increasing-subsequence/" target="_blank" onclick="stopProp(event)">LC #300 ↗</a></div>
+      <div class="q-row" data-id="d4q7" data-day="day-4" onclick="toggle('d4q7','day-4')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">0/1 Knapsack — trace small table in head: W=4, items=[(2,3),(3,4),(1,2)]</div><div class="badge-row"><span class="tcs-b">TCS★</span></div></div>
+      <div class="q-row" data-id="d4q8" data-day="day-4" onclick="toggle('d4q8','day-4')"><div class="cb"><span class="cb-check">✓</span></div><div class="q-text">Mental check: 2 examples each of Greedy vs DP — Coin change, Fractional Knapsack</div><div class="badge-row"><span class="tcs-b">TCS★</span><span class="theory-b">Theory</span></div></div>
+    </div>
+    <div class="tip"><strong>🔥 Exam Rules:</strong> Stop studying by 10 AM. In the exam — Read twice, identify pattern (1D/Knapsack/Grid/String), write recurrence FIRST then code. Stuck? Submit brute force, then optimize. Time per problem: ~20 min. YOU'VE GOT THIS! 💪</div>
+  </div>
+</div>
+
+<button class="reset-btn" onclick="resetAll()">↺ Reset All Progress</button>
+
+</main>
+
+<!-- Congrats Modal -->
+<div class="congrats" id="congrats">
+  <div class="congrats-emoji">🎉</div>
+  <h2>You're Ready!</h2>
+  <p>Every question checked. You've done the work. Now go walk into that TCS NQT exam and own it!</p>
+  <button class="close-btn" onclick="document.getElementById('congrats').classList.remove('show')">Let's Go! 🚀</button>
+</div>
+
+<script>
+const LS_KEY = 'tcs_nqt_dp_blitz_2026';
+const DAYS_CONFIG = {
+  'day-1': 11, 'day-2': 10, 'day-3': 12, 'day-4': 8
+};
+const TOTAL = Object.values(DAYS_CONFIG).reduce((a, b) => a + b, 0);
+
+function getState() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }
+  catch { return {}; }
+}
+function saveState(s) { localStorage.setItem(LS_KEY, JSON.stringify(s)); }
+
+function init() {
+  const state = getState();
+  document.querySelectorAll('.q-row[data-id]').forEach(row => {
+    if (state[row.dataset.id]) row.classList.add('done');
+  });
+  updateBars();
+}
+
+function toggle(id, day) {
+  const row = document.querySelector(`[data-id="${id}"]`);
+  if (!row) return;
+  const state = getState();
+  const isDone = row.classList.toggle('done');
+  state[id] = isDone;
+  saveState(state);
+  if (isDone) {
+    row.style.transform = 'scale(1.015)';
+    setTimeout(() => { row.style.transform = ''; }, 200);
+  }
+  updateBars();
+}
+
+function stopProp(e) { e.stopPropagation(); }
+
+function getDayDone(day) {
+  const state = getState();
+  return [...document.querySelectorAll(`[data-day="${day}"]`)].filter(r => state[r.dataset.id]).length;
+}
+
+function updateBars() {
+  let totalDone = 0;
+  Object.keys(DAYS_CONFIG).forEach(day => {
+    const done = getDayDone(day);
+    const total = DAYS_CONFIG[day];
+    totalDone += done;
+    const pct = total ? (done / total) * 100 : 0;
+    const progEl = document.getElementById(`prog-${day}`);
+    const barEl = document.getElementById(`bar-${day}`);
+    if (progEl) progEl.textContent = `${done}/${total}`;
+    if (barEl) barEl.style.width = pct + '%';
+  });
+  const pct = (totalDone / TOTAL) * 100;
+  document.getElementById('overall-fill').style.width = pct + '%';
+  document.getElementById('bar-right-label').textContent = `${totalDone} / ${TOTAL} done`;
+  const leftLabel = pct >= 100 ? '🎉 All Complete!' : pct >= 75 ? '🔥 Almost There!' : pct >= 50 ? '💪 Halfway Done' : pct > 0 ? '⚡ Keep Going!' : 'Overall Progress';
+  document.getElementById('bar-left-label').textContent = leftLabel;
+  if (totalDone === TOTAL && TOTAL > 0) {
+    setTimeout(() => document.getElementById('congrats').classList.add('show'), 500);
+  }
+}
+
+function toggleDay(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function resetAll() {
+  if (!confirm('Reset all progress? This will clear your saved data.')) return;
+  localStorage.removeItem(LS_KEY);
+  document.querySelectorAll('.q-row').forEach(r => r.classList.remove('done'));
+  updateBars();
+}
+
+// Countdown to April 1 2026, 9:00 AM IST
+function tick() {
+  const target = new Date('2026-04-01T09:00:00+05:30').getTime();
+  const diff = target - Date.now();
+  if (diff <= 0) {
+    ['cd-d','cd-h','cd-m','cd-s'].forEach(id => { document.getElementById(id).textContent = '00'; });
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-d').textContent = String(d).padStart(2,'0');
+  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+}
+setInterval(tick, 1000);
+tick();
+init();
+</script>
+</body>
+</html>
